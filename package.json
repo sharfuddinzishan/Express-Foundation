@@ -2,8 +2,9 @@
   "name": "express-foundation",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
+    "start:dev": "nodemon ./dist/app/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -13,6 +14,7 @@
     "express": "^4.18.2"
   },
   "devDependencies": {
+    "nodemon": "^3.0.1",
     "typescript": "^5.3.2"
   }
 }
