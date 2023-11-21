@@ -8,11 +8,31 @@ const app = (0, express_1.default)();
 // Parser
 app.use(express_1.default.json());
 app.use(express_1.default.text());
+// Routing
+const userRouter = express_1.default.Router();
+app.use("/api/v1/users", userRouter);
+const cycleRouter = express_1.default.Router();
+app.use('/api/v1/cycles', cycleRouter);
 // Middleware
 const logger = (req, res, next) => {
     console.log(req.url, req.hostname, req.ip, req.path);
     next();
 };
+userRouter.post('/', (req, res) => {
+    console.log(req.body);
+    res.json({
+        message: 'User Created',
+        success: true,
+        data: req.body,
+    });
+});
+cycleRouter.get('/show', (req, res) => {
+    res.json({
+        cycleId: '12k3j4j5',
+        price: 12000,
+        model: 'Urban',
+    });
+});
 app.get('/', (req, res) => {
     res.send('Hello World Zishan!');
 });

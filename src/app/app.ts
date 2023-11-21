@@ -5,11 +5,37 @@ const app = express()
 app.use(express.json())
 app.use(express.text())
 
+// Routing
+const userRouter=express.Router()
+app.use("/api/v1/users",userRouter)
+
+const cycleRouter=express.Router()
+app.use('/api/v1/cycles',cycleRouter)
+
+
 // Middleware
 const logger =(req:Request,res:Response,next:NextFunction)=>{
   console.log(req.url,req.hostname,req.ip,req.path);
   next()
 }
+
+userRouter.post('/',(req,res)=>{
+  console.log(req.body);
+  res.json({
+    message:'User Created',
+    success:true,
+    data:req.body,
+  })
+})
+
+cycleRouter.get('/show',(req,res)=>{
+  res.json({
+    cycleId:'12k3j4j5',
+    price:12000,
+    model:'Urban',
+  })
+})
+
 app.get('/', (req:Request, res:Response) => {
   res.send('Hello World Zishan!')
 })
