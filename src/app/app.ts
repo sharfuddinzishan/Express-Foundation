@@ -1,15 +1,20 @@
-import express, { Request,Response } from 'express'
+import express, { NextFunction, Request,Response } from 'express'
 const app = express()
 
 // Parser
 app.use(express.json())
 app.use(express.text())
 
+// Middleware
+const logger =(req:Request,res:Response,next:NextFunction)=>{
+  console.log(req.url,req.hostname,req.ip,req.path);
+  next()
+}
 app.get('/', (req:Request, res:Response) => {
   res.send('Hello World Zishan!')
 })
 
-app.post('/:id/:semester', (req:Request, res:Response) => {
+app.post('/:id/:semester',logger, (req:Request, res:Response) => {
   let {id,semester}=req.params||{}
   res.send(`Got Param Data ${id},${semester}`)
   console.log(req.params);
@@ -22,7 +27,7 @@ app.post('/', (req:Request, res:Response) => {
 })
 
 
-app.post('/poem', (req:Request, res:Response) => {
+app.post('/poem',logger, (req:Request, res:Response) => {
   console.log(req.body);
   res.send('Poem Send!')
 })

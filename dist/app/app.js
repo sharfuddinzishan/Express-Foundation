@@ -8,10 +8,15 @@ const app = (0, express_1.default)();
 // Parser
 app.use(express_1.default.json());
 app.use(express_1.default.text());
+// Middleware
+const logger = (req, res, next) => {
+    console.log(req.url, req.hostname, req.ip, req.path);
+    next();
+};
 app.get('/', (req, res) => {
     res.send('Hello World Zishan!');
 });
-app.post('/:id/:semester', (req, res) => {
+app.post('/:id/:semester', logger, (req, res) => {
     let { id, semester } = req.params || {};
     res.send(`Got Param Data ${id},${semester}`);
     console.log(req.params);
@@ -21,7 +26,7 @@ app.post('/', (req, res) => {
     res.send(`Got Query Data ${id},${semester}`);
     console.log(req.query);
 });
-app.post('/poem', (req, res) => {
+app.post('/poem', logger, (req, res) => {
     console.log(req.body);
     res.send('Poem Send!');
 });
