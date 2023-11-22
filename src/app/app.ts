@@ -1,4 +1,4 @@
-import express, { NextFunction, Request,Response } from 'express'
+import express, { NextFunction, Request,Response, request, response } from 'express'
 const app = express()
 
 // Parser
@@ -40,6 +40,15 @@ app.get('/', (req:Request, res:Response) => {
   res.send('Hello World Zishan!')
 })
 
+app.get('/info',logger,(req:Request,res:Response,next:NextFunction)=>{
+  try{
+    res.send(data)
+  }
+  catch(error){
+    next(error)
+  }
+})
+
 app.post('/:id/:semester',logger, (req:Request, res:Response) => {
   let {id,semester}=req.params||{}
   res.send(`Got Param Data ${id},${semester}`)
@@ -61,6 +70,26 @@ app.post('/poem',logger, (req:Request, res:Response) => {
 app.post('/getData',(req:Request,res:Response)=>{
   console.log(req.body);
   res.send('got Data')
-})
+}) 
+
+// Routing handler
+const handleRouting=(req:Request,res:Response)=>{
+  res.status(400).json({
+    message:'Invalid Address',
+    successfull:false
+  })
+}
+app.all('**',handleRouting)
+
+// Global Error Handle
+let handleError=(error:any,req:Request,res:Response,next:NextFunction)=>{
+  console.log(error);
+  res.status(400).json({
+    message:'No Response Found',
+    successful:false,
+    data:error
+  })
+}
+app.use(handleError)
 
 export default app;

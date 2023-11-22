@@ -36,6 +36,14 @@ cycleRouter.get('/show', (req, res) => {
 app.get('/', (req, res) => {
     res.send('Hello World Zishan!');
 });
+app.get('/info', logger, (req, res, next) => {
+    try {
+        res.send(data);
+    }
+    catch (error) {
+        next(error);
+    }
+});
 app.post('/:id/:semester', logger, (req, res) => {
     let { id, semester } = req.params || {};
     res.send(`Got Param Data ${id},${semester}`);
@@ -54,4 +62,22 @@ app.post('/getData', (req, res) => {
     console.log(req.body);
     res.send('got Data');
 });
+// Routing handler
+const handleRouting = (req, res) => {
+    res.status(400).json({
+        message: 'Invalid Address',
+        successfull: false
+    });
+};
+app.all('**', handleRouting);
+// Global Error Handle
+let handleError = (error, req, res, next) => {
+    console.log(error);
+    res.status(400).json({
+        message: 'No Response Found',
+        successful: false,
+        data: error
+    });
+};
+app.use(handleError);
 exports.default = app;
